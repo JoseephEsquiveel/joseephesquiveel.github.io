@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACOLDC - Observatorio de Eficiencia Energética de Data Centers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <style>
+        body {
+            background-color: #0b132b;
+            color: #e0e6ed;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .header-acoldc {
+            background: linear-gradient(135deg, #1c2541 0%, #3a506b 100%);
+            border-bottom: 3px solid #5bc0be;
+            padding: 2.2rem 1rem;
+            margin-bottom: 2rem;
+            border-radius: 0 0 1rem 1rem;
+        }
+        .metric-card {
+            background: #1c2541;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            border-left: 4px solid #5bc0be;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #5bc0be;
+        }
+        .metric-sub {
+            font-size: 0.85rem;
+            color: #9baec8;
+            margin-top: 0.25rem;
+        }
+        .metric-label {
+            font-size: 0.8rem;
+            color: #cdd9e5;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .chart-card {
+            background: #1c2541;
+            padding: 1.2rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .card-table {
+            background: #1c2541;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        .table-dark-custom {
+            color: #e0e6ed;
+            margin-bottom: 0;
+        }
+        .table-dark-custom thead {
+            background-color: #0b132b;
+            color: #5bc0be;
+        }
+        .table-dark-custom tr {
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+    </style>
+</head>
+<body>
+    <div class="header-acoldc">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div>
+                    <h1 class="display-6 fw-bold mb-1" style="color: #6fffe9;">⚡ ACOLDC - Observatorio Energético</h1>
+                    <p class="lead mb-0 text-white-50">Asociación Colombiana de Data Centers • Monitoreo de Eficiencia & Sostenibilidad</p>
+                </div>
+                <div class="text-md-end mt-2 mt-md-0 d-flex flex-column align-items-md-end">
+                    <div class="mb-2">
+                        <a href="index.html" class="btn btn-outline-info btn-sm">← Back to Portfolio</a>
+                        <span class="badge bg-dark border border-info p-2 ms-2">Official ACOLDC Metrics</span>
+                    </div>
+                    <div class="small text-white-50">Author: Joseph Esquivel</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        <!-- Tarjetas de Línea Base y KPIs de ACOLDC -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3 col-6">
+                <div class="metric-card">
+                    <div class="metric-value">1,460.0</div>
+                    <div class="metric-label">Energía Total Medida (MWh)</div>
+                    <div class="metric-sub">6 Datacenters Afiliados</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="metric-card" style="border-left-color: #f39c12;">
+                    <div class="metric-value" style="color: #f39c12;">1.45</div>
+                    <div class="metric-label">PUE Promedio de la Red</div>
+                    <div class="metric-sub">Rango: 1.22 (Mejor) a 1.81</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="metric-card" style="border-left-color: #2ecc71;">
+                    <div class="metric-value" style="color: #2ecc71;">227,500.0</div>
+                    <div class="metric-label">Línea Base Normal (kWh/mes)</div>
+                    <div class="metric-sub">Típico: 198,750.0 - 278,750.0 kWh</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="metric-card" style="border-left-color: #e74c3c;">
+                    <div class="metric-value" style="color: #e67e22;">25.0%</div>
+                    <div class="metric-label">Gasto en Climatización</div>
+                    <div class="metric-sub">Línea base rack: 2,857.2 kWh/rack</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alertas -->
+
+        <div class="mb-4">
+            <h5 class="fw-bold text-warning mb-2">⚡ Alertas y Oportunidades de Optimización</h5>
+
+        <div class="alert alert-warning mb-2 py-2">
+            <strong>⚠ CRÍTICO - PUE Elevado:</strong> Datacenter Caribe Submarino (DC-BAQ-01) (2025-01) - PUE muy superior al estándar recomendado. El 38.8% de la energía se destina a climatización/pérdidas.
+        </div>
+
+        </div>
+
+
+        <!-- Gráficos Principales -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="chart-card">
+                    <div style="height:380px; width:100%;">                            <div id="c0d8366c-8a29-4873-ad07-123c8b3df050" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("c0d8366c-8a29-4873-ad07-123c8b3df050")) {                    Plotly.newPlot(                        "c0d8366c-8a29-4873-ad07-123c8b3df050",                        [{"hovertemplate":"Eficiencia=Bueno\u003cbr\u003eDatacenter=%{x}\u003cbr\u003ePUE (Power Usage Effectiveness)=%{text}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Bueno","marker":{"color":"#2980b9","pattern":{"shape":""}},"name":"Bueno","orientation":"v","showlegend":true,"text":{"dtype":"f8","bdata":"9ihcj8L19D8AAAAAAAD4P6RwPQrXo\u002fQ\u002fhetRuB6F8z8="},"textposition":"auto","x":["Datacenter Bogot\u00e1 Zona Franca","Datacenter Calle 100","Datacenter Ruta N Medell\u00edn","Datacenter Tocancip\u00e1 Edge"],"xaxis":"x","y":{"dtype":"f8","bdata":"9ihcj8L19D8AAAAAAAD4P6RwPQrXo\u002fQ\u002fhetRuB6F8z8="},"yaxis":"y","type":"bar"},{"hovertemplate":"Eficiencia=Mejorable\u003cbr\u003eDatacenter=%{x}\u003cbr\u003ePUE (Power Usage Effectiveness)=%{text}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Mejorable","marker":{"color":"#f39c12","pattern":{"shape":""}},"name":"Mejorable","orientation":"v","showlegend":true,"text":{"dtype":"f8","bdata":"9ihcj8L1+D8="},"textposition":"auto","x":["Datacenter Valle Pac\u00edfico"],"xaxis":"x","y":{"dtype":"f8","bdata":"9ihcj8L1+D8="},"yaxis":"y","type":"bar"},{"hovertemplate":"Eficiencia=Alerta \u002f Ineficiente\u003cbr\u003eDatacenter=%{x}\u003cbr\u003ePUE (Power Usage Effectiveness)=%{text}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Alerta \u002f Ineficiente","marker":{"color":"#c0392b","pattern":{"shape":""}},"name":"Alerta \u002f Ineficiente","orientation":"v","showlegend":true,"text":{"dtype":"f8","bdata":"9ihcj8L1\u002fD8="},"textposition":"auto","x":["Datacenter Caribe Submarino"],"xaxis":"x","y":{"dtype":"f8","bdata":"9ihcj8L1\u002fD8="},"yaxis":"y","type":"bar"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Datacenter"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"PUE (Power Usage Effectiveness)"}},"legend":{"title":{"text":"Eficiencia"},"tracegroupgap":0},"title":{"text":"\u003cb\u003e\u00cdndice PUE por Centro de Datos Afiliado\u003c\u002fb\u003e (Objetivo: menor a 1.5)"},"barmode":"relative","shapes":[{"line":{"color":"#27ae60","dash":"dot"},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":1.2,"y1":1.2,"yref":"y"},{"line":{"color":"#2980b9","dash":"dash"},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":1.5,"y1":1.5,"yref":"y"},{"line":{"color":"#c0392b","dash":"longdash"},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":1.8,"y1":1.8,"yref":"y"}],"annotations":[{"showarrow":false,"text":"Meta Mundial (1.2)","x":1,"xanchor":"right","xref":"x domain","y":1.2,"yanchor":"bottom","yref":"y"},{"showarrow":false,"text":"Promedio Deseable (1.5)","x":1,"xanchor":"right","xref":"x domain","y":1.5,"yanchor":"bottom","yref":"y"},{"showarrow":false,"text":"L\u00edmite Ineficiencia (1.8)","x":1,"xanchor":"right","xref":"x domain","y":1.8,"yanchor":"bottom","yref":"y"}],"margin":{"l":20,"r":20,"t":50,"b":80},"height":380},                        {"responsive": true}                    )                };            </script>        </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="chart-card">
+                    <div style="height:380px; width:100%;">                            <div id="c409a61e-f2dd-4ba9-a749-1aa861df555f" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("c409a61e-f2dd-4ba9-a749-1aa861df555f")) {                    Plotly.newPlot(                        "c409a61e-f2dd-4ba9-a749-1aa861df555f",                        [{"hovertemplate":"Tipo_Energia=Equipos TI \u002f Servidores\u003cbr\u003enombre_datacenter=%{x}\u003cbr\u003ekWh=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Equipos TI \u002f Servidores","marker":{"color":"#2980b9","pattern":{"shape":""}},"name":"Equipos TI \u002f Servidores","orientation":"v","showlegend":true,"textposition":"auto","x":["Datacenter Bogot\u00e1 Zona Franca","Datacenter Calle 100","Datacenter Ruta N Medell\u00edn","Datacenter Valle Pac\u00edfico","Datacenter Caribe Submarino","Datacenter Tocancip\u00e1 Edge"],"xaxis":"x","y":{"dtype":"f8","bdata":"AAAAAECzEUEAAAAAABcBQQAAAABAdwtBAAAAAICE\u002fkAAAAAAwHoAQQAAAACAE\u002fxA"},"yaxis":"y","type":"bar"},{"hovertemplate":"Tipo_Energia=Climatizaci\u00f3n \u002f HVAC\u003cbr\u003enombre_datacenter=%{x}\u003cbr\u003ekWh=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Climatizaci\u00f3n \u002f HVAC","marker":{"color":"#e67e22","pattern":{"shape":""}},"name":"Climatizaci\u00f3n \u002f HVAC","orientation":"v","showlegend":true,"textposition":"auto","x":["Datacenter Bogot\u00e1 Zona Franca","Datacenter Calle 100","Datacenter Ruta N Medell\u00edn","Datacenter Valle Pac\u00edfico","Datacenter Caribe Submarino","Datacenter Tocancip\u00e1 Edge"],"xaxis":"x","y":{"dtype":"f8","bdata":"AAAAAACO8kAAAAAAAFLsQAAAAAAAXupAAAAAAABM7UAAAAAAgDH3QAAAAAAAiNNA"},"yaxis":"y","type":"bar"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"nombre_datacenter"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"kWh"}},"legend":{"title":{"text":"Tipo_Energia"},"tracegroupgap":0},"title":{"text":"\u003cb\u003eDistribuci\u00f3n del Gasto: Servidores (TI) vs Climatizaci\u00f3n\u003c\u002fb\u003e"},"barmode":"stack","margin":{"l":20,"r":20,"t":50,"b":80},"height":380},                        {"responsive": true}                    )                };            </script>        </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="chart-card">
+                    <div style="height:360px; width:100%;">                            <div id="ce015ca8-2e77-444f-871d-93537876e293" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("ce015ca8-2e77-444f-871d-93537876e293")) {                    Plotly.newPlot(                        "ce015ca8-2e77-444f-871d-93537876e293",                        [{"hovertemplate":"\u003cb\u003e%{hovertext}\u003c\u002fb\u003e\u003cbr\u003e\u003cbr\u003eciudad=Bogot\u00e1\u003cbr\u003eRacks Activos=%{x}\u003cbr\u003eConsumo Total (kWh)=%{y}\u003cbr\u003epue=%{marker.size}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["Datacenter Bogot\u00e1 Zona Franca","Datacenter Calle 100","Datacenter Tocancip\u00e1 Edge"],"legendgroup":"Bogot\u00e1","marker":{"color":"#636efa","size":{"dtype":"f8","bdata":"9ihcj8L19D8AAAAAAAD4P4XrUbgehfM\u002f"},"sizemode":"area","sizeref":0.004525,"symbol":"circle"},"mode":"markers","name":"Bogot\u00e1","orientation":"v","showlegend":true,"x":{"dtype":"i2","bdata":"jABGADcA"},"xaxis":"x","y":{"dtype":"f8","bdata":"AAAAAIAxF0EAAAAAgKIJQQAAAAAAFwFB"},"yaxis":"y","type":"scatter"},{"hovertemplate":"\u003cb\u003e%{hovertext}\u003c\u002fb\u003e\u003cbr\u003e\u003cbr\u003eciudad=Medell\u00edn\u003cbr\u003eRacks Activos=%{x}\u003cbr\u003eConsumo Total (kWh)=%{y}\u003cbr\u003epue=%{marker.size}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["Datacenter Ruta N Medell\u00edn"],"legendgroup":"Medell\u00edn","marker":{"color":"#EF553B","size":{"dtype":"f8","bdata":"pHA9Ctej9D8="},"sizemode":"area","sizeref":0.004525,"symbol":"circle"},"mode":"markers","name":"Medell\u00edn","orientation":"v","showlegend":true,"x":{"dtype":"i1","bdata":"bg=="},"xaxis":"x","y":{"dtype":"f8","bdata":"AAAAAECzEUE="},"yaxis":"y","type":"scatter"},{"hovertemplate":"\u003cb\u003e%{hovertext}\u003c\u002fb\u003e\u003cbr\u003e\u003cbr\u003eciudad=Cali\u003cbr\u003eRacks Activos=%{x}\u003cbr\u003eConsumo Total (kWh)=%{y}\u003cbr\u003epue=%{marker.size}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["Datacenter Valle Pac\u00edfico"],"legendgroup":"Cali","marker":{"color":"#00cc96","size":{"dtype":"f8","bdata":"9ihcj8L1+D8="},"sizemode":"area","sizeref":0.004525,"symbol":"circle"},"mode":"markers","name":"Cali","orientation":"v","showlegend":true,"x":{"dtype":"i1","bdata":"QQ=="},"xaxis":"x","y":{"dtype":"f8","bdata":"AAAAAMDNB0E="},"yaxis":"y","type":"scatter"},{"hovertemplate":"\u003cb\u003e%{hovertext}\u003c\u002fb\u003e\u003cbr\u003e\u003cbr\u003eciudad=Barranquilla\u003cbr\u003eRacks Activos=%{x}\u003cbr\u003eConsumo Total (kWh)=%{y}\u003cbr\u003epue=%{marker.size}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["Datacenter Caribe Submarino"],"legendgroup":"Barranquilla","marker":{"color":"#ab63fa","size":{"dtype":"f8","bdata":"9ihcj8L1\u002fD8="},"sizemode":"area","sizeref":0.004525,"symbol":"circle"},"mode":"markers","name":"Barranquilla","orientation":"v","showlegend":true,"x":{"dtype":"i1","bdata":"SA=="},"xaxis":"x","y":{"dtype":"f8","bdata":"AAAAAEDoDUE="},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Racks Activos"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Consumo Total (kWh)"}},"legend":{"title":{"text":"ciudad"},"tracegroupgap":0,"itemsizing":"constant"},"title":{"text":"\u003cb\u003eEscala y Eficiencia: Racks Activos vs Consumo Total\u003c\u002fb\u003e (Tama\u00f1o burbuja = PUE)"},"margin":{"l":20,"r":20,"t":50,"b":40},"height":360},                        {"responsive": true}                    )                };            </script>        </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Tabla detallada de centros de datos -->
+        <div class="card-table mt-3">
+            <div class="p-3" style="background: #151d36; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <h5 class="mb-0 fw-bold text-white">📋 Matriz de Mediciones Energéticas de Miembros ACOLDC</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-dark table-hover table-dark-custom align-middle">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Datacenter</th>
+                            <th>Ciudad</th>
+                            <th>Periodo</th>
+                            <th>Consumo Total</th>
+                            <th>Consumo TI</th>
+                            <th>Refrig. %</th>
+                            <th>PUE</th>
+                            <th>Clasificación</th>
+                            <th>kWh/Rack</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+        <tr>
+            <td><strong>DC-BOG-01</strong></td>
+            <td>Datacenter Bogotá Zona Franca</td>
+            <td><span class="badge bg-secondary">Bogotá</span></td>
+            <td>2025-01</td>
+            <td><strong>380,000 kWh</strong></td>
+            <td>290,000 kWh</td>
+            <td>20.0%</td>
+            <td><span class="badge" style="background-color: #2980b9; font-size: 0.95rem;">1.31</span></td>
+            <td><span style="color: #2980b9; font-weight: 600;">Bueno</span></td>
+            <td>2,714.3</td>
+        </tr>
+
+        <tr>
+            <td><strong>DC-BOG-02</strong></td>
+            <td>Datacenter Calle 100</td>
+            <td><span class="badge bg-secondary">Bogotá</span></td>
+            <td>2025-01</td>
+            <td><strong>210,000 kWh</strong></td>
+            <td>140,000 kWh</td>
+            <td>27.6%</td>
+            <td><span class="badge" style="background-color: #2980b9; font-size: 0.95rem;">1.50</span></td>
+            <td><span style="color: #2980b9; font-weight: 600;">Bueno</span></td>
+            <td>3,000.0</td>
+        </tr>
+
+        <tr>
+            <td><strong>DC-MED-01</strong></td>
+            <td>Datacenter Ruta N Medellín</td>
+            <td><span class="badge bg-secondary">Medellín</span></td>
+            <td>2025-01</td>
+            <td><strong>290,000 kWh</strong></td>
+            <td>225,000 kWh</td>
+            <td>18.6%</td>
+            <td><span class="badge" style="background-color: #2980b9; font-size: 0.95rem;">1.29</span></td>
+            <td><span style="color: #2980b9; font-weight: 600;">Bueno</span></td>
+            <td>2,636.4</td>
+        </tr>
+
+        <tr>
+            <td><strong>DC-CAL-01</strong></td>
+            <td>Datacenter Valle Pacífico</td>
+            <td><span class="badge bg-secondary">Cali</span></td>
+            <td>2025-01</td>
+            <td><strong>195,000 kWh</strong></td>
+            <td>125,000 kWh</td>
+            <td>30.8%</td>
+            <td><span class="badge" style="background-color: #f39c12; font-size: 0.95rem;">1.56</span></td>
+            <td><span style="color: #f39c12; font-weight: 600;">Mejorable</span></td>
+            <td>3,000.0</td>
+        </tr>
+
+        <tr>
+            <td><strong>DC-BAQ-01</strong></td>
+            <td>Datacenter Caribe Submarino</td>
+            <td><span class="badge bg-secondary">Barranquilla</span></td>
+            <td>2025-01</td>
+            <td><strong>245,000 kWh</strong></td>
+            <td>135,000 kWh</td>
+            <td>38.8%</td>
+            <td><span class="badge" style="background-color: #c0392b; font-size: 0.95rem;">1.81</span></td>
+            <td><span style="color: #c0392b; font-weight: 600;">Alerta / Ineficiente</span></td>
+            <td>3,402.8</td>
+        </tr>
+
+        <tr>
+            <td><strong>DC-BOG-03</strong></td>
+            <td>Datacenter Tocancipá Edge</td>
+            <td><span class="badge bg-secondary">Bogotá</span></td>
+            <td>2025-01</td>
+            <td><strong>140,000 kWh</strong></td>
+            <td>115,000 kWh</td>
+            <td>14.3%</td>
+            <td><span class="badge" style="background-color: #2980b9; font-size: 0.95rem;">1.22</span></td>
+            <td><span style="color: #2980b9; font-weight: 600;">Bueno</span></td>
+            <td>2,545.5</td>
+        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <footer class="text-center text-white-50 mt-4 small">
+            Prototipo de Software Energético desarrollado para la <strong>Asociación Colombiana de Data Centers (ACOLDC)</strong>.
+        </footer>
+    </div>
+</body>
+</html>

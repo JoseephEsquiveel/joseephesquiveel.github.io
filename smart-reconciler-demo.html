@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartReconciler - Automated Financial Reconciliation Engine</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <style>
+        body {
+            background-color: #0b132b;
+            color: #e0e6ed;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .header-custom {
+            background: linear-gradient(135deg, #102a43 0%, #243b53 100%);
+            border-bottom: 3px solid #f2c94c;
+            padding: 2.2rem 1rem;
+            margin-bottom: 2rem;
+            border-radius: 0 0 1rem 1rem;
+        }
+        .metric-card {
+            background: #1c2541;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            border-left: 4px solid #f2c94c;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #f2c94c;
+        }
+        .metric-sub {
+            font-size: 0.85rem;
+            color: #9baec8;
+            margin-top: 0.25rem;
+        }
+        .metric-label {
+            font-size: 0.8rem;
+            color: #cdd9e5;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .chart-card {
+            background: #1c2541;
+            padding: 1.2rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .card-table {
+            background: #1c2541;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        .table-dark-custom {
+            margin-bottom: 0;
+            color: #e0e6ed;
+        }
+        .table-dark-custom thead {
+            background-color: #0b132b;
+            color: #f2c94c;
+        }
+        .table-dark-custom tr {
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .badge-matched {
+            background: rgba(39, 174, 96, 0.2);
+            color: #2ecc71;
+            border: 1px solid #27ae60;
+        }
+        .badge-discrepancy {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 1px solid #c0392b;
+        }
+        .badge-warning {
+            background: rgba(243, 156, 18, 0.2);
+            color: #f39c12;
+            border: 1px solid #d35400;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-custom">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div>
+                    <h1 class="display-6 fw-bold mb-1" style="color: #f2c94c;">💳 SmartReconciler</h1>
+                    <p class="lead mb-0 text-white-50">Automated Financial Reconciliation & Discrepancy Detection Engine</p>
+                </div>
+                <div class="text-md-end mt-2 mt-md-0 d-flex flex-column align-items-md-end">
+                    <div class="mb-2">
+                        <a href="index.html" class="btn btn-outline-warning btn-sm">← Back to Portfolio</a>
+                        <span class="badge bg-dark border border-warning p-2 ms-2">Engine: Python & SQLite</span>
+                    </div>
+                    <div class="small text-white-50">Designed by: Joseph Esquivel</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        <!-- Tarjetas de KPIs de Conciliación -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3 col-6">
+                <div class="metric-card">
+                    <div class="metric-value">$842.5M</div>
+                    <div class="metric-label">Total Processed (COP)</div>
+                    <div class="metric-sub">5,280 Transactions</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="metric-card" style="border-left-color: #2ecc71;">
+                    <div class="metric-value" style="color: #2ecc71;">98.4%</div>
+                    <div class="metric-label">Matched Rate</div>
+                    <div class="metric-sub">Fuzzy & Key Match</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="metric-card" style="border-left-color: #e74c3c;">
+                    <div class="metric-value" style="color: #e74c3c;">$14.8M</div>
+                    <div class="metric-label">Discrepancies Detected</div>
+                    <div class="metric-sub">Fee & Settlement Inconsistencies</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="metric-card" style="border-left-color: #3498db;">
+                    <div class="metric-value" style="color: #3498db;">4.2 sec</div>
+                    <div class="metric-label">ETL & Matching Time</div>
+                    <div class="metric-sub">Automated Processing</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráficos Principales -->
+        <div class="row g-3">
+            <div class="col-lg-8">
+                <div class="chart-card">
+                    <div id="reconciliation_trend_chart" style="height: 380px;"></div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="chart-card">
+                    <div id="gateways_breakdown_chart" style="height: 380px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico de Discrepancias y Comisiones -->
+        <div class="row g-3 mt-2">
+            <div class="col-lg-12">
+                <div class="chart-card">
+                    <div id="discrepancy_types_chart" style="height: 320px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de Auditoría y Detección de Discrepancias -->
+        <div class="card-table mt-4 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0 text-white">🔍 Automated Discrepancy & Audit Log</h4>
+                <span class="badge bg-secondary">Real-Time Rule Evaluator</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-dark table-hover table-dark-custom">
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Date / Time</th>
+                            <th>Retail Store</th>
+                            <th>Payment Gateway</th>
+                            <th>Gross Amount</th>
+                            <th>Expected Fee</th>
+                            <th>Charged Fee</th>
+                            <th>Discrepancy Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>TXN-2025-0981</code></td>
+                            <td>2025-10-14 18:22</td>
+                            <td>Store Titan Plaza (Bogotá)</td>
+                            <td>Redeban (Datafono)</td>
+                            <td>$1,420,000</td>
+                            <td>$28,400 (2.0%)</td>
+                            <td>$34,080 (2.4%)</td>
+                            <td><span class="badge badge-discrepancy">Fee Overcharge (+$5,680)</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>TXN-2025-0982</code></td>
+                            <td>2025-10-14 18:45</td>
+                            <td>Store Santafe (Medellín)</td>
+                            <td>CredibanCo</td>
+                            <td>$680,000</td>
+                            <td>$13,600 (2.0%)</td>
+                            <td>$13,600 (2.0%)</td>
+                            <td><span class="badge badge-matched">Matched 100%</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>TXN-2025-0983</code></td>
+                            <td>2025-10-14 19:10</td>
+                            <td>Store Unicentro (Cali)</td>
+                            <td>Wompi (E-Commerce)</td>
+                            <td>$320,000</td>
+                            <td>$8,480 (2.65%)</td>
+                            <td>$8,480 (2.65%)</td>
+                            <td><span class="badge badge-matched">Matched 100%</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>TXN-2025-0984</code></td>
+                            <td>2025-10-14 19:35</td>
+                            <td>Store Gran Estación (Bogotá)</td>
+                            <td>MercadoPago</td>
+                            <td>$890,000</td>
+                            <td>$24,030 (2.7%)</td>
+                            <td>$0 (Unsettled)</td>
+                            <td><span class="badge badge-warning">Settlement Pending (>48h)</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>TXN-2025-0985</code></td>
+                            <td>2025-10-14 20:05</td>
+                            <td>Store Parque Colina (Bogotá)</td>
+                            <td>Bold Datáfono</td>
+                            <td>$2,150,000</td>
+                            <td>$47,300 (2.2%)</td>
+                            <td>$51,600 (2.4%)</td>
+                            <td><span class="badge badge-discrepancy">Commission Drift (+$4,300)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gráfico 1: Tendencia de Conciliación
+        const days = ['Oct 01', 'Oct 05', 'Oct 10', 'Oct 15', 'Oct 20', 'Oct 25', 'Oct 30'];
+        const matchedData = [120, 145, 160, 185, 210, 195, 230];
+        const discrepancyData = [3, 2, 5, 2, 4, 1, 3];
+
+        Plotly.newPlot('reconciliation_trend_chart', [
+            {
+                x: days,
+                y: matchedData,
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Matched Transactions',
+                line: { color: '#2ecc71', width: 3 },
+                fill: 'tozeroy',
+                fillcolor: 'rgba(46, 204, 113, 0.15)'
+            },
+            {
+                x: days,
+                y: discrepancyData,
+                type: 'bar',
+                name: 'Flagged Discrepancies',
+                marker: { color: '#e74c3c' },
+                yaxis: 'y2'
+            }
+        ], {
+            title: { text: '<b>Daily Reconciliation Volume & Anomaly Rate</b>', font: { color: '#e0e6ed', size: 16 } },
+            paper_bgcolor: 'transparent',
+            plot_bgcolor: 'transparent',
+            margin: { t: 50, r: 50, l: 50, b: 40 },
+            legend: { orientation: 'h', y: -0.2, font: { color: '#cdd9e5' } },
+            xaxis: { color: '#cdd9e5', gridcolor: '#243b53' },
+            yaxis: { title: 'Matched Txns', color: '#cdd9e5', gridcolor: '#243b53' },
+            yaxis2: { title: 'Discrepancies', overlaying: 'y', side: 'right', color: '#e74c3c', showgrid: false }
+        }, { responsive: true, displayModeBar: false });
+
+        // Gráfico 2: Desglose por Pasarela de Pago
+        Plotly.newPlot('gateways_breakdown_chart', [{
+            labels: ['Redeban', 'CredibanCo', 'Wompi', 'Bold', 'MercadoPago'],
+            values: [38, 28, 16, 12, 6],
+            type: 'pie',
+            hole: 0.5,
+            marker: { colors: ['#f2c94c', '#3498db', '#9b59b6', '#1abc9c', '#e67e22'] },
+            textinfo: 'label+percent',
+            textposition: 'inside',
+            insidetextorientation: 'radial'
+        }], {
+            title: { text: '<b>Share by Payment Gateway</b>', font: { color: '#e0e6ed', size: 16 } },
+            paper_bgcolor: 'transparent',
+            plot_bgcolor: 'transparent',
+            margin: { t: 50, r: 20, l: 20, b: 20 },
+            showlegend: false
+        }, { responsive: true, displayModeBar: false });
+
+        // Gráfico 3: Causas de Discrepancia
+        Plotly.newPlot('discrepancy_types_chart', [{
+            x: ['Commission Overcharge', 'Unsettled (>48h)', 'Timing Delay (Cut-off)', 'POS Tax Rounding', 'Refund Inconsistencies'],
+            y: [5.8, 4.2, 2.6, 1.4, 0.8],
+            type: 'bar',
+            marker: {
+                color: ['#e74c3c', '#f39c12', '#3498db', '#1abc9c', '#9b59b6']
+            },
+            text: ['$5.8M COP', '$4.2M COP', '$2.6M COP', '$1.4M COP', '$0.8M COP'],
+            textposition: 'auto'
+        }], {
+            title: { text: '<b>Financial Impact by Discrepancy Classification (Million COP)</b>', font: { color: '#e0e6ed', size: 16 } },
+            paper_bgcolor: 'transparent',
+            plot_bgcolor: 'transparent',
+            margin: { t: 50, r: 30, l: 50, b: 60 },
+            xaxis: { color: '#cdd9e5', gridcolor: '#243b53' },
+            yaxis: { title: 'Discrepancy (M COP)', color: '#cdd9e5', gridcolor: '#243b53' }
+        }, { responsive: true, displayModeBar: false });
+    </script>
+</body>
+</html>

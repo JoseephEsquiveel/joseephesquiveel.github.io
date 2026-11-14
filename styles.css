@@ -395,8 +395,18 @@ details[open] summary em {
 
 .wire {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.wire > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.wire > div > div:last-child {
+  margin-top: auto;
+  padding-top: 14px;
 }
 
 .wire .ph {
@@ -407,6 +417,104 @@ details[open] summary em {
   font-size: .9rem;
   margin-top: 8px;
   color: var(--green);
+}
+
+.wire .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.wire .tag {
+  font-size: .78rem;
+  font-weight: 500;
+  padding: 3px 8px;
+  background: var(--white);
+  border: 1px solid var(--ink);
+  color: var(--ink);
+}
+
+.wire .ph-link {
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.wire .ph-image {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.wire .ph-image::before,
+.wire .ph-image::after {
+  display: none !important;
+}
+
+.wire .ph-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .3s ease;
+}
+
+.wire .ph-link:hover .ph-image {
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.wire .ph-link:hover .ph-image img {
+  transform: scale(1.04);
+}
+
+.wire .live-pill {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--mark);
+  color: var(--ink);
+  font: 700 .75rem var(--head);
+  padding: 3px 8px;
+  border: 1.5px solid var(--ink);
+  z-index: 2;
+  box-shadow: 2px 2px 0 var(--ink);
+  letter-spacing: 0.5px;
+}
+
+.wire .ph-caption {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: var(--white);
+  color: var(--ink);
+  font: 700 .85rem var(--head);
+  padding: 4px 10px;
+  border: 1.5px solid var(--ink);
+  z-index: 2;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.wire .btn-demo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 .85rem var(--head);
+  padding: 7px 14px;
+  background: var(--mark);
+  border: 1.5px solid var(--ink);
+  color: var(--ink);
+  text-decoration: none;
+  margin-top: 12px;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.wire .btn-demo:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 3px 3px 0 var(--ink);
+  background: #f7d56e;
 }
 
 
